@@ -14,6 +14,12 @@
 const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   
+  // Log the error to the console for the developer
+  console.error(`🔥 [Error Handler]: ${err.message}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.error(err.stack);
+  }
+  
   res.status(statusCode).json({
     message: err.message,
     // Only show stack trace in development

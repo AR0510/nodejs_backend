@@ -22,10 +22,18 @@ const app = express();
  */
 
 // Security headers
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: false, // Disable CSP in dev to prevent blocking frontend assets
+}));
 
 // Cross-Origin Resource Sharing
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // HTTP request logging
 if (process.env.NODE_ENV === 'development') {

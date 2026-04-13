@@ -59,6 +59,7 @@ const registerUser = async (req, res, next) => {
  */
 const authUser = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(`🔑 Login attempt for: ${email}`);
 
   try {
     const user = await User.findOne({ email }).select('+password');
