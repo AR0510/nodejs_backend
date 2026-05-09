@@ -36,6 +36,9 @@ const addMoney = async (req, res, next) => {
       description: 'Added money to wallet',
     });
 
+    // Terminal Log
+    console.log(`\x1b[32m💰 [DEPOSIT] User: ${req.user.email} | Amount: ₹${amount} | New Balance: ₹${wallet.balance}\x1b[0m`);
+
     res.json({
       message: 'Money added successfully',
       balance: wallet.balance,
@@ -89,6 +92,9 @@ const transferMoney = async (req, res, next) => {
       type: TRANSACTION_TYPES.TRANSFER,
       description: `Transfer to ${recipientEmail}`,
     });
+
+    // Terminal Log
+    console.log(`\x1b[36m💸 [TRANSFER] Sender: ${req.user.email} ➡️ Receiver: ${recipientEmail} | Amount: ₹${amount} | Sender New Balance: ₹${senderWallet.balance}\x1b[0m`);
 
     res.json({
       message: 'Transfer successful',
