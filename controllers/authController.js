@@ -17,6 +17,14 @@ const registerUser = async (req, res, next) => {
   const { name, fullName, email, password, dob, city, state, country } = req.body;
 
   try {
+    // Password validation regex
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      res.status(400);
+      throw new Error('Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.');
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
