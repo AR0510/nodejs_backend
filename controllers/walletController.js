@@ -6,6 +6,7 @@
 const Wallet = require('../models/Wallet');
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 const { TRANSACTION_TYPES } = require('../utils/constants');
 
 /**
@@ -34,6 +35,14 @@ const addMoney = async (req, res, next) => {
       amount,
       type: TRANSACTION_TYPES.DEPOSIT,
       description: 'Added money to wallet',
+    });
+
+    // Create Notification
+    await Notification.create({
+      userId: req.user.id,
+      title: 'Amount Credited',
+      message: `₹${amount} has been credited to your account.`,
+      type: 'success'
     });
 
     // Terminal Log
@@ -91,6 +100,22 @@ const transferMoney = async (req, res, next) => {
       amount,
       type: TRANSACTION_TYPES.TRANSFER,
       description: `Transfer to ${recipientEmail}`,
+    });
+
+    // 1. Notify Sender
+    await Notification.create({
+      userId: req.user.id,
+      title: 'Transfer Successful',
+      message: `₹${amount} has been transferred to ${recipientEmail}.`,
+      type: 'success'
+    });
+
+    // 2. Notify Receiver
+    await Notification.create({
+      userId: recipient._id,
+      title: 'Money Received',
+      message: `You received ₹${amount} from ${req.user.email}.`,
+      type: 'success'
     });
 
     // Terminal Log

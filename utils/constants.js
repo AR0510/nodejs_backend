@@ -20,4 +20,10 @@ module.exports = {
     COMPLETED: 'completed',
     FAILED: 'failed',
   },
+  NOTIFICATION_TYPES: {
+    TRANSFER_RECEIVED: 'TRANSFER_RECEIVED',
+    TRANSFER_SENT: 'TRANSFER_SENT',
+    DEPOSIT_SUCCESS: 'DEPOSIT_SUCCESS',
+    GENERAL: 'GENERAL',
+  },
 };

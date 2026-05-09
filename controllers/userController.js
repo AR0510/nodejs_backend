@@ -20,7 +20,12 @@ const getUserProfile = async (req, res, next) => {
       res.json({
         _id: user._id,
         name: user.name,
+        fullName: user.fullName,
         email: user.email,
+        dob: user.dob,
+        city: user.city,
+        state: user.state,
+        country: user.country,
         balance: wallet ? wallet.balance : 0,
       });
     } else {

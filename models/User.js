@@ -35,6 +35,27 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false, // Don't return password by default
     },
+    fullName: {
+      type: String,
+      required: [true, 'Please add a full name'],
+      trim: true,
+    },
+    dob: {
+      type: Date,
+      required: [true, 'Please add a date of birth'],
+    },
+    city: {
+      type: String,
+      required: [true, 'Please add a city'],
+    },
+    state: {
+      type: String,
+      required: [true, 'Please add a state'],
+    },
+    country: {
+      type: String,
+      required: [true, 'Please add a country'],
+    },
   },
   {
     timestamps: true,

@@ -14,7 +14,7 @@ const { WALLET } = require('../utils/constants');
  * @access  Public
  */
 const registerUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, fullName, email, password, dob, city, state, country } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -26,8 +26,13 @@ const registerUser = async (req, res, next) => {
 
     const user = await User.create({
       name,
+      fullName,
       email,
       password,
+      dob,
+      city,
+      state,
+      country,
     });
 
     if (user) {
@@ -40,7 +45,12 @@ const registerUser = async (req, res, next) => {
       res.status(201).json({
         _id: user._id,
         name: user.name,
+        fullName: user.fullName,
         email: user.email,
+        dob: user.dob,
+        city: user.city,
+        state: user.state,
+        country: user.country,
         token: generateToken(user._id),
       });
     } else {
