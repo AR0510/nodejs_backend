@@ -42,19 +42,9 @@ if (process.env.FRONTEND_URL) {
 
 app.use(cors({
   origin: function (origin, callback) {
-    // 1. Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-
-    // 2. Check if origin is in the allowed list
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      // Instead of returning an Error object (which causes 500), 
-      // we return null to the error and false to the origin.
-      // This results in a standard 403/CORS block instead of a server crash.
-      console.error(`🚫 CORS Blocked for origin: ${origin}`);
-      return callback(null, false);
-    }
+    // Allow all origins (effectively '*')
+    // Note: We use a function here because 'origin: *' cannot be used with 'credentials: true'
+    return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
