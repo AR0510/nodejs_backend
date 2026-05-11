@@ -28,25 +28,38 @@ app.use(helmet({
 }));
 
 // Cross-Origin Resource Sharing
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5000'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:5000',
+];
+
 if (process.env.FRONTEND_URL) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
+  // Clean trailing slash if present
+  const cleanedUrl = process.env.FRONTEND_URL.replace(/\/$/, "");
+  allowedOrigins.push(cleanedUrl);
 }
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
+    // 1. Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+
+    // 2. Check if origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      // Instead of returning an Error object (which causes 500), 
+      // we return null to the error and false to the origin.
+      // This results in a standard 403/CORS block instead of a server crash.
+      console.error(`🚫 CORS Blocked for origin: ${origin}`);
+      return callback(null, false);
     }
-    return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200
 }));
 
 // HTTP request logging
